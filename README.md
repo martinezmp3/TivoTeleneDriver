@@ -15,4 +15,6 @@ What you need:
 •	Click save Device
 •	In the Preferences section ip = ip of Tivo 
 •	Click save
-•	If everything went well you should be able to control the TiVo now (this is a work in progress any feedback will be really appreciate)
+•	If everything went well you should be able to control the TiVo now 
+
+(this is a work in progress any feedback will be really appreciate)
