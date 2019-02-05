@@ -41,7 +41,14 @@ GUIDE
 INFO 
 EXIT 
 
+capability "TV"
+channelDown()
+channelUp()
 
+capability "MusicPlayer"
+pause()
+play()
+stop()
 */
 
 metadata 
@@ -52,7 +59,9 @@ metadata
 		capability "Polling"
 		capability "Telnet"
 		capability "Initialize"
-		attribute "channelStatus", "NUMBER"
+//		capability "MusicPlayer"
+		capability "TV"
+		attribute "channel", "NUMBER"
 		command "chUp"
 		command "chDown"
 		command "pause"
@@ -68,8 +77,12 @@ metadata
 		command "select"
 		command "standby"
 		command "clear"
+		command "stop"
+		command "guide"
 		command "testCommand", ["STRING"]
 		command "setCH", ["STRING"]
+		command "nextTrack"
+		command "previousTrack"
 	}
 
 	preferences 
@@ -77,21 +90,42 @@ metadata
 		section("Device Settings:") 
 		{
 			input "TiVoIP", "string", title:"TiVoIP", description: "", required: true, displayDuringSetup: true
+			input "TiVoMini", "bool", title:"", description: "Is this a tivo mini", required: true, displayDuringSetup: true
 		}
 	}
+}
+
+def guide (){
+	sendMsg("IRCODE GUIDE")
 }
 
 def testCommand(Command){
 	sendMsg(Command)
 //	sendMsg("IRCODE "+Command)
 }
+def send1 ()
+{
+	sendMsg("IRCODE NUM1")
+}
+def send4 ()
+{
+	sendMsg("IRCODE NUM4")
+}
 def setCH (CH){
-	String[] str;
-	str = CH.split("");
-	for(String values : str ){
-		sendMsg("IRCODE NUM${values}")
-//		sleep(3000)
+	if (settings.TiVoMini){ //if is mark as mini
+		String[] str
+		str = CH.split("")
+		pause (2000)
+		for(String values : str ){
+			send4 ()
+//			sendMsg("IRCODE NUM${values}")
+//			pause (2000)
+		}
 	}
+	else{ //if is not a mini
+		sendMsg("SETCH "+ CH)
+	}
+
 	
 //	log.debug(values);
 //	sendMsg("SETCH " + CH)
@@ -125,8 +159,6 @@ def left (){
 def right (){
 	sendMsg("IRCODE RIGHT")
 }
-
-
 def play (){
 	sendMsg("IRCODE PLAY")
 }
@@ -136,10 +168,15 @@ def liveTv(){
 def chUp (){
 	sendMsg("IRCODE CHANNELUP")
 }
+def nextTrack(){
+	chUp ()
+}
 def chDown (){
 	sendMsg("IRCODE CHANNELDOWN")
 }
-
+def previousTrack(){
+	chDown ()
+}
 def myShows (){
 	sendMsg("IRCODE NOWSHOWING")
 }
@@ -147,7 +184,9 @@ def myShows (){
 def pause (){
 	sendMsg("IRCODE PAUSE")
 }
-
+def stop(){
+	sendMsg("IRCODE STOP")
+}
 def installed() 
 {
 	log.info('Tivo Telnet : installed()')
@@ -180,8 +219,8 @@ private parse(String msg)
 	if(msg.startsWith("CH_STATUS"))
 	{
 		log.info "got channel update " + msg.substring(10,14)
-		state.channelStatus = msg.substring(10,14).toInteger()
-		sendEvent(name: "channelStatus", value: state.channelStatus, isStateChange: true)
+		state.channel = msg.substring(10,14).toInteger()
+		sendEvent(name: "channel", value: state.channel, isStateChange: true)
 	}
 
 }
@@ -193,4 +232,14 @@ def telnetStatus(String status){
 		log.error "Connection was dropped."
 		initialize()
 	} 
+}
+def pause(millis) {
+   def passed = 0
+   def now = new Date().time
+   log.debug "pausing... at Now: $now"
+   /* This loop is an impolite busywait. We need to be given a true sleep() method, please. */
+   while ( passed < millis ) {
+       passed = new Date().time - now
+   }
+//   log.debug "... DONE pausing."
 }
