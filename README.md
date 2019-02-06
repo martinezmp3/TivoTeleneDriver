@@ -14,6 +14,7 @@ What you need:
 -	In the type filed look for Tivo Telnet
 -	Click save Device
 -	In the Preferences section ip = ip of Tivo 
+- if that tivo is a mini mark is a mini (for the moment setchannel do not work on tivo mini)
 -	Click save
 -	If everything went well you should be able to control the TiVo now 
 
