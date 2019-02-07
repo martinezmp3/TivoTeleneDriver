@@ -112,8 +112,7 @@ private parse(String msg){
 }
 def telnetStatus(String status){
 	log.warn "telnetStatus: error: " + status
-	if (status != "receive error: Stream is closed")
-	{
+	if (status != "receive error: Stream is closed"){
 		log.error "Connection was dropped."
 		initialize()
 	} 
