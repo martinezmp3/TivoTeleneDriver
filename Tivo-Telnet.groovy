@@ -13,6 +13,7 @@ metadata {
 	definition (name: "Tivo Telnet", namespace: "jorge.martinez", author: "Jorge Martinez") {
 		capability "Telnet"
 		capability "Initialize"
+		capability "Switch"
 		attribute "channel", "NUMBER"
 		command "chUp"
 		command "chDown"
