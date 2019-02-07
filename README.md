@@ -13,7 +13,7 @@ jeremy.akers
 
 What you need:
 -	A Hubitat Hub
--	A Tivo Box I’m not sure yet what version of tivo work (update Series3 running software 9.1 and up)
+-	A Tivo Box I’m not sure yet what version of tivo work (UPDATE: Series3 running software 9.1 and up)
 -	You need to allow network remote control on your tivo (Menu -> Settings -> Remote & Devices -> Network remote control)
 -	You need to know your tivo IP Address (Menu -> Settings -> Network Settings
 -	Open up the Tivo-Telnet.groovy and copy Ctrl+a and Ctrl+c (https://raw.githubusercontent.com/martinezmp3/TivoTeleneDriver/master/Tivo-Telnet.groovy)
